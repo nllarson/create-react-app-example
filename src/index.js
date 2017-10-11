@@ -1,8 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import { BrowserRouter } from 'react-router-dom'
+import {blue, grey, red} from 'material-ui/colors';
+
+import registerServiceWorker from './registerServiceWorker'
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue, // Purple and green play nicely together.
+    secondary: grey,
+    error: red
+  }
+})
+
+const repoFinder = Component => {
+  return (
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Component />
+      </BrowserRouter>
+    </MuiThemeProvider>
+  )
+}
+
+ReactDOM.render(repoFinder(App), document.getElementById('root'))
+registerServiceWorker()
