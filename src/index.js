@@ -10,10 +10,10 @@ import registerServiceWorker from './registerServiceWorker'
 
 const theme = createMuiTheme({
   palette: {
-    primary: blue, // Purple and green play nicely together.
+    primary: blue,
     secondary: grey,
     error: red
-  }
+  }    
 })
 
 const repoFinder = Component => {
