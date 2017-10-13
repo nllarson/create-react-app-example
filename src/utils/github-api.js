@@ -9,18 +9,24 @@ const fetchRepos = username => {
     .then(response => response.json())
 }
 
-const fetchUserInfo = username => {
-    const url = `${BASE_URL}/users/${username}`
-    return fetch(url)
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())  
+const fetchUser = username => {
+  const url = `${BASE_URL}/users/${username}`
+  return fetch(url)
+    .then(ApiUtils.checkStatus)
+    .then(response => response.json())
 }
 
 const fetchOrgs = username => {
-    const url = `${BASE_URL}/users/${username}/orgs`
-    return fetch(url)
-      .then(ApiUtils.checkStatus)
-      .then(response => response.json())
+  const url = `${BASE_URL}/users/${username}/orgs`
+  return fetch(url)
+    .then(ApiUtils.checkStatus)
+    .then(response => response.json())
 }
 
-export { fetchRepos, fetchUserInfo }
+const fetchUserInformation = username => {
+  return Promise.all([fetchUser(username), fetchOrgs(username)]).then(([user, orgs]) => {
+    return { user, orgs }
+  })
+}
+
+export { fetchRepos, fetchUser, fetchOrgs, fetchUserInformation }

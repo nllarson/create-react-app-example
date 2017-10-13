@@ -2,64 +2,51 @@ import React, { Component } from 'react'
 import { Avatar, Typography } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 import ProfileStat from './ProfileStat'
+import {fetchUserInformation} from '../utils/github-api'
 
 class Profile extends Component {
-  constructor() {
-    super()
+  constructor(args) {
+    super(args)
 
     this.state = {
-      user: {
-        login: 'nllarson',
-        id: 208498,
-        avatar_url: 'https://avatars1.githubusercontent.com/u/208498?v=4',
-        html_url: 'https://github.com/nllarson',
-        name: 'Nick Larson',
-        company: '@objectpartners',
-        location: 'Omaha, NE ',
-        public_repos: 13,
-        followers: 16,
-        following: 9
-      },
-
-      orgs: [
-        {
-          login: 'objectpartners',
-          id: 1569148,
-          avatar_url: 'https://avatars1.githubusercontent.com/u/1569148?v=4'
-        },
-        {
-          login: 'OJUG',
-          id: 7458223,
-          avatar_url: 'https://avatars2.githubusercontent.com/u/7458223?v=4'
-        }
-      ]
+      user: {},
+      orgs: []
     }
   }
+
+  getProfile = (username) => {
+    fetchUserInformation(username).then(({user, orgs}) => {
+      this.setState({user,orgs})
+    })
+  }
+
+  componentWillMount() {
+    this.getProfile(this.props.username)
+  }
+
   render() {
     const { user, orgs } = this.state
     const { classes } = this.props
     return (
       <div>
-        <div className={`${classes.user} + ' ' + ${classes.bottomborder}`}>
+        <div className={classes.user}>
           <Avatar src={user.avatar_url} className={classes.avatar} />
           <Typography type="headline" color="secondary">
             {user.name}
           </Typography>
           <Typography type="caption">{user.login}</Typography>
         </div>
-        <div className={`${classes.stats} + ' ' + ${classes.bottomborder}`}>
+        <div className={classes.stats}>
           <ProfileStat value={user.followers} label="followers" />
           <ProfileStat value={user.public_repos} label="repositories" />
           <ProfileStat value={user.following} label="following" />
         </div>
-        <div className={classes.bottomborder}>
+        {orgs.length > 0 && <div className={classes.bottomborder}>
           <Typography type="caption" color="secondary">
             Organizations
           </Typography>
-          <div className={classes.orgs}>
-            {orgs.map(org => <Avatar src={org.avatar_url} />)}
-          </div>
-        </div>
+          <div className={classes.orgs}>{orgs.map(org => <Avatar key={org.id} src={org.avatar_url} />)}</div>
+        </div>}
       </div>
     )
   }
@@ -75,19 +62,23 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottom: '1px solid #eee',
+    padding: theme.spacing.unit * 2    
   },
   stats: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    textAlign: 'center'
+    textAlign: 'center',
+    borderBottom: '1px solid #eee',
+    padding: theme.spacing.unit * 2
   },
   orgs: {
     paddingTop: theme.spacing.unit,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   avatar: {
     width: 200,
