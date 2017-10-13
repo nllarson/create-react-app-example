@@ -6,8 +6,8 @@ export default class App extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/:username" component={User} />
-        <Redirect from="/" to="/nllarson" />
+        <Route exact path="/user/:username" component={User} />
+        <Redirect from="/" to="/user/nllarson" />
       </Switch>
     )
   }
