@@ -1,4 +1,4 @@
-create-react-app-example
+# create-react-app-example
 
 - [ ] What is react
 - [ ] Website
@@ -8,6 +8,8 @@ create-react-app-example
 - [ ] layout picture
 - [ ] demo time!
 
+
+## Application Setup
 
 ```shell
 create-react-app repoBrowser
@@ -24,8 +26,10 @@ yarn add react-router
 yarn add react-router-dom
 ```
 
-- [ ] New Favicon
+## Add Routing
+
 - [ ] index.js changes
+- [ ] discuss the new urls, touch briefly that we will use this later
 
 ```javascript
 import React from 'react'
@@ -57,6 +61,9 @@ yarn start
 ```
 
 - [ ] Show that react-create-app stil shows up, but notice url
+
+## Build Our App
+
 - [ ] Create Placeholder files for `Profile.js`, `RepoList.js`, and `RepoFilter.js`
 - [ ] App.js
 
@@ -90,6 +97,7 @@ const styles = theme => ({
 export default withStyles(styles)(App)
 ```
 
+### Build Profile Component(s)
 
 - [ ] Profile.js
 
@@ -194,6 +202,8 @@ const styles = theme => ({
 })
 ```
 
+### More Components!!! (Code Reuse)
+
 - [ ] ProfileStat.js  
 
 ```javascript
@@ -215,6 +225,8 @@ const styles = theme => ({
 <ProfileStat value={user.public_repos} label="repositories" />
 <ProfileStat value={user.following} label="following" />
 ```
+
+### Build RepoList Components()
 
 - [ ] RepoList.js
 
@@ -354,6 +366,7 @@ const styles = theme => ({
 })
 ```
 
+### Build RepoFilter and make it work
 
 - [ ] RepoFilter.js
 
@@ -435,9 +448,15 @@ export default App
 
 - [ ] Explain that the props of these functions are changing as we type into the filter (`.setState(...)` is happening).  This causes React to reconsile te DOM and show the changes!  WOW!!!!!
 
+
+## Hook into GitHub API
+
 - [ ] Now...let's bring this thing to life!!!!
 - [ ] Remember earlier when talking about Router and URL, let's use that as the key to search for the proper GH repo
 - [ ] ApiUtils.js and github-api.js
+
+
+### API code / utilities
 
 ```javascript
 const ApiUtils = {  
@@ -489,6 +508,8 @@ const fetchUserInformation = username => {
 
 export { fetchRepos, fetchUser, fetchOrgs, fetchUserInformation }
 ```
+
+### Wire it all together
 
 - [ ] Grab `username` in `App.js` and send it along to `<Profile/>` and `<RepoList/>`
 - [ ] Clean state in `Profile.js` and `RepoList.js` and add the `componentDidMount()`
