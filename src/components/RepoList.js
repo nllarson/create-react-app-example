@@ -29,7 +29,7 @@ export default class RepoList extends Component {
       <List>
         {repos
           .filter(repo => {
-            return (              
+            return (
               (repo.name && repo.name.toLowerCase().includes(filter.toLowerCase())) ||
               (repo.description && repo.description.toLowerCase().includes(filter.toLowerCase()))
             )

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Avatar, Typography } from 'material-ui'
+import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
 import ProfileStat from './ProfileStat'
-import {fetchUserInformation} from '../utils/github-api'
+import { fetchUserInformation } from '../utils/github-api'
 
 class Profile extends Component {
   constructor(args) {
@@ -12,11 +13,12 @@ class Profile extends Component {
       user: {},
       orgs: []
     }
+
   }
 
-  getProfile = (username) => {
-    fetchUserInformation(username).then(({user, orgs}) => {
-      this.setState({user,orgs})
+  getProfile = username => {
+    fetchUserInformation(username).then(({ user, orgs }) => {
+      this.setState({ user, orgs })
     })
   }
 
@@ -28,26 +30,46 @@ class Profile extends Component {
     const { user, orgs } = this.state
     const { classes } = this.props
     return (
-      <div>
-        <div className={classes.user}>
-          <Avatar src={user.avatar_url} className={classes.avatar} />
-          <Typography type="headline" color="secondary">
-            {user.name}
-          </Typography>
-          <Typography type="caption">{user.login}</Typography>
-        </div>
-        <div className={classes.stats}>
-          <ProfileStat value={user.followers} label="followers" />
-          <ProfileStat value={user.public_repos} label="repositories" />
-          <ProfileStat value={user.following} label="following" />
-        </div>
-        {orgs.length > 0 && <div className={classes.bottomborder}>
-          <Typography type="caption" color="secondary">
-            Organizations
-          </Typography>
-          <div className={classes.orgs}>{orgs.map(org => <Avatar key={org.id} src={org.avatar_url} />)}</div>
-        </div>}
-      </div>
+      <Grid container spacing={0} direction="column">
+        <Grid item>
+          <Grid
+            container
+            className={classes.bottomborder}
+            direction="column"
+            align="center"
+            justify="center"
+            spacing={0}
+          >
+            <Grid item>
+              <Avatar src={user.avatar_url} className={classes.avatar} />
+            </Grid>
+            <Grid item>
+              <Typography type="headline" color="secondary">
+                {user.name}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography type="caption">{user.login}</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container className={classes.bottomborder} justify="space-between" align="center">
+            <ProfileStat value={user.followers} label="followers" />
+            <ProfileStat value={user.public_repos} label="repositories" />
+            <ProfileStat value={user.following} label="following" />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container className={classes.bottomborder} justify="center" align="center">
+            {orgs.map(org => (
+              <Grid item key={org.id}>
+                <Avatar src={org.avatar_url} />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
     )
   }
 }
@@ -56,29 +78,7 @@ const styles = theme => ({
   bottomborder: {
     textAlign: 'center',
     borderBottom: '1px solid #eee',
-    padding: theme.spacing.unit * 2
-  },
-  user: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottom: '1px solid #eee',
-    padding: theme.spacing.unit * 2    
-  },
-  stats: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    textAlign: 'center',
-    borderBottom: '1px solid #eee',
-    padding: theme.spacing.unit * 2
-  },
-  orgs: {
-    paddingTop: theme.spacing.unit,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    paddingTop: theme.spacing.unit * 2
   },
   avatar: {
     width: 200,

@@ -2,20 +2,21 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
-import { BrowserRouter } from 'react-router-dom'
-import registerServiceWorker from './registerServiceWorker'
+import { BrowserRouter, Route, Redirect, Switch} from 'react-router-dom'
 
 const theme = createMuiTheme()
 
-const repoFinder = Component => {
+const repoFinder = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <Component/>
+        <Switch>
+          <Route exact path="/user/:username" component={App} />
+          <Redirect from="/" to="/user/nllarson" />
+        </Switch>
       </BrowserRouter>
     </MuiThemeProvider>
   )
 }
 
-ReactDOM.render(repoFinder(App), document.getElementById('root'))
-registerServiceWorker()
+ReactDOM.render(repoFinder(), document.getElementById('root'))

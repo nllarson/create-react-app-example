@@ -1,14 +1,34 @@
 import React, { Component } from 'react'
-import { Route, Redirect, Switch } from 'react-router-dom'
-import User from './components/User'
+import Grid from 'material-ui/Grid'
+import Profile from './components/Profile'
+import RepoList from './components/RepoList'
+import RepoFilter from './components/RepoFilter'
 
-export default class App extends Component {
+class App extends Component {
+  constructor(args) {
+    super(args)
+    this.state = { filter: '' }
+  }
+
+  handleFilterUpdate = filter => {
+    this.setState({ filter })
+  }
+
   render() {
+    const { filter } = this.state
+    const username = this.props.match.params.username
     return (
-      <Switch>
-        <Route exact path="/user/:username" component={User} />
-        <Redirect from="/" to="/user/nllarson" />
-      </Switch>
+      <Grid container spacing={24}>
+        <Grid item xs={12} sm={3}>
+          <Profile username={username} />
+        </Grid>
+        <Grid item xs={12} sm={9}>
+          <RepoFilter onUpdate={this.handleFilterUpdate} />
+          <RepoList username={username} filter={filter} />
+        </Grid>
+      </Grid>
     )
   }
 }
+
+export default App
