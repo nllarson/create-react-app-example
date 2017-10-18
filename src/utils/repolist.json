@@ -1,0 +1,34 @@
+repos: [
+        {
+          id: 35244465,
+          name: 'awesome-java',
+          full_name: 'nllarson/awesome-java',
+          html_url: 'https://github.com/nllarson/awesome-java',
+          description: 'A curated list of awesome Java frameworks, libraries and software. Inspired by awesome-python.',
+          pushed_at: '2015-05-07T20:24:00Z',
+          stargazers_count: 1,
+          language: null,
+          forks_count: 0
+        },
+        {
+          id: 48047948,
+          name: 'testing-presentation',
+          html_url: 'https://github.com/nllarson/testing-presentation',
+          description: 'Why do we test?',
+          pushed_at: '2015-12-17T06:23:28Z',
+          stargazers_count: 2,
+          language: 'JavaScript',
+          forks_count: 1
+        },
+        {
+          id: 1087533,
+          name: 'dotfiles',
+          full_name: 'nllarson/dotfiles',
+          html_url: 'https://github.com/nllarson/dotfiles',
+          description: 'my dotfiles',
+          pushed_at: '2014-04-04T03:31:34Z',
+          stargazers_count: 3,
+          language: 'Shell',
+          forks_count: 2
+        }
+      ]
