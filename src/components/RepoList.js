@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { List } from 'material-ui'
-import { fetchRepos } from '../utils/github-api'
 import Repo from './Repo'
+import { fetchRepos } from '../utils/github-api'
 
 export default class RepoList extends Component {
-  constructor() {
-    super()
+  constructor(args) {
+    super(args)
 
     this.state = {
       repos: []

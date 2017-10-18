@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Avatar, Typography } from 'material-ui'
-import Grid from 'material-ui/Grid'
+import { Grid, Avatar, Typography } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 import ProfileStat from './ProfileStat'
 import { fetchUserInformation } from '../utils/github-api'
@@ -13,32 +12,32 @@ class Profile extends Component {
       user: {},
       orgs: []
     }
-
   }
 
-  getProfile = username => {
+  getUserData = username => {
     fetchUserInformation(username).then(({ user, orgs }) => {
       this.setState({ user, orgs })
     })
   }
 
   componentWillMount() {
-    this.getProfile(this.props.username)
+    this.getUserData(this.props.username)
   }
 
   render() {
     const { user, orgs } = this.state
     const { classes } = this.props
+
     return (
-      <Grid container spacing={0} direction="column">
+      <Grid container direction="column">
         <Grid item>
           <Grid
             container
-            className={classes.bottomborder}
             direction="column"
             align="center"
             justify="center"
             spacing={0}
+            className={classes.bottomBorder}
           >
             <Grid item>
               <Avatar src={user.avatar_url} className={classes.avatar} />
@@ -54,19 +53,21 @@ class Profile extends Component {
           </Grid>
         </Grid>
         <Grid item>
-          <Grid container className={classes.bottomborder} justify="space-between" align="center">
-            <ProfileStat value={user.followers} label="followers" />
-            <ProfileStat value={user.public_repos} label="repositories" />
-            <ProfileStat value={user.following} label="following" />
+          <Grid container justify="space-between" align="center" className={classes.bottomBorder}>
+            <ProfileStat label="followers" value={user.followers} />
+            <ProfileStat label="repositories" value={user.public_repos} />
+            <ProfileStat label="following" value={user.following} />
           </Grid>
         </Grid>
         <Grid item>
-          <Grid container className={classes.bottomborder} justify="center" align="center">
-            {orgs.map(org => (
-              <Grid item key={org.id}>
-                <Avatar src={org.avatar_url} />
-              </Grid>
-            ))}
+          <Grid container justify="center" className={classes.bottomBorder}>
+            {orgs.map(org => {
+              return (
+                <Grid item key={org.id}>
+                  <Avatar src={org.avatar_url} />
+                </Grid>
+              )
+            })}
           </Grid>
         </Grid>
       </Grid>
@@ -75,15 +76,13 @@ class Profile extends Component {
 }
 
 const styles = theme => ({
-  bottomborder: {
-    textAlign: 'center',
+  bottomBorder: {
     borderBottom: '1px solid #eee',
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing.unit
   },
   avatar: {
     width: 200,
-    height: 200,
-    marginBottom: 20
+    height: 200
   }
 })
 

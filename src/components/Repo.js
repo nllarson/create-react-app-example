@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import { ListItem, Card, CardHeader, CardContent, CardActions, Typography, Chip, Avatar } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
-import { ListItem, Typography, Card, CardActions, CardHeader, CardContent, Chip, Avatar, IconButton } from 'material-ui'
-import { CallSplit, Star, OpenInNew } from 'material-ui-icons'
+import { Star, CallSplit } from 'material-ui-icons'
 import moment from 'moment'
 
 const StarAvatar = () => {
@@ -24,30 +24,20 @@ class Repo extends Component {
   render() {
     const { classes, repo } = this.props
     const timeUpdated = moment(repo.pushed_at).fromNow()
-
-    const title = (
-      <span>
-        {repo.name}
-        <IconButton href={repo.html_url} target="_blank" aria-label="open">
-          <OpenInNew />
-        </IconButton>
-      </span>
-    )
-
     return (
       <ListItem>
         <Card className={classes.repo}>
-          <CardHeader title={title} />
+          <CardHeader title={repo.name} />
           <CardContent>
-            <Typography component="p">{repo.description}</Typography>
+            <Typography>{repo.description}</Typography>
+            <Typography type="caption" color="secondary">
+              Last Update: {timeUpdated}
+            </Typography>
           </CardContent>
           <CardActions>
-            {repo.language ? <Chip label={repo.language} /> : ''}
-            <Chip avatar={<StarAvatar />} label={repo.stargazers_count || 0} />
-            <Chip avatar={<ForkAvatar />} label={repo.forks_count || 0} />
-            <Typography className={classes.lastUpdate} type="caption" color="secondary" align="right">
-              {timeUpdated}
-            </Typography>
+            {repo.language && <Chip label={repo.language} />}
+            <Chip avatar={<StarAvatar />} label={repo.stargazers_count} />
+            <Chip avatar={<ForkAvatar />} label={repo.forks_count} />
           </CardActions>
         </Card>
       </ListItem>
@@ -60,10 +50,7 @@ const styles = theme => ({
     width: `100%`
   },
   lastUpdate: {
-    flex: '1 1 auto',
-    marginRight: 20
-  },
-  cardActions: {
+    flex: `1 1 auto`,
     marginRight: 20
   }
 })
