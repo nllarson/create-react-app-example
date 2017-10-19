@@ -1,6 +1,6 @@
 {
-  "short_name": "Create React App",
-  "name": "Create React App Demo",
+  "short_name": "Create React App Example",
+  "name": "Create React App Example",
   "icons": [
     {
       "src": "favicon.ico",
