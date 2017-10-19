@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #A31515;
+	font-size: inherit;
+	font-family: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<h1>create-react-app-example</h1>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">What is react</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Website</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">create-react-app (huh???)</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">GitHub - https://developer.github.com/v3/</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Material-UI / React Router (react libaries, gives us components to reuse)</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">layout picture</label></li>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">demo time!</label></li>
+</ul>
+<h2>Application Setup</h2>
+<pre class="hljs"><code><div>create-react-app repoBrowser
+cd repoBrowser
+yarn start
+</div></code></pre>
+<ul>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Demo live reload / etc, explain everything that CRA does so you don’t have to!</label></li>
+</ul>
+<pre class="hljs"><code><div>yarn add material-ui@next
+yarn add material-ui-icons@next
+yarn add react-router
+yarn add react-router-dom
+cp ~/Desktop/nwmsu/utils/* .
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>Add Routing</h2>
+<ul>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">index.js changes</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Show that react-create-app stil shows up, but notice url</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">discuss the new urls, touch briefly that we will use this later</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">'./App'</span>
+<span class="hljs-keyword">import</span> { MuiThemeProvider, createMuiTheme } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/styles'</span>
+<span class="hljs-keyword">import</span> { BrowserRouter, Route, Redirect, Switch} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span>
+
+<span class="hljs-keyword">const</span> theme = createMuiTheme()
+
+<span class="hljs-keyword">const</span> repoFinder = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> (
+    &lt;MuiThemeProvider theme={theme}&gt;
+      &lt;BrowserRouter&gt;
+        &lt;Switch&gt;
+          &lt;Route exact path="/user/:username" component={App} /&gt;
+          &lt;Redirect from="/" to="/user/nllarson" /&gt;
+        &lt;/Switch&gt;
+      &lt;/BrowserRouter&gt;
+    &lt;/MuiThemeProvider&gt;
+  )
+}
+
+ReactDOM.render(repoFinder(), document.getElementById('root'))
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>Build Our App</h2>
+<ul>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Create Placeholder files for </label><code>Profile.js</code>, <code>RepoList.js</code>, and <code>RepoFilter.js</code></li>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12">App.js</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> Grid <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/Grid'</span>
+<span class="hljs-keyword">import</span> Profile <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/Profile'</span>
+<span class="hljs-keyword">import</span> RepoList <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/RepoList'</span>
+<span class="hljs-keyword">import</span> RepoFilter <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/RepoFilter'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">container</span> <span class="hljs-attr">spacing</span>=<span class="hljs-string">{24}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span> <span class="hljs-attr">xs</span>=<span class="hljs-string">{12}</span> <span class="hljs-attr">sm</span>=<span class="hljs-string">{3}</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Profile</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span> <span class="hljs-attr">xs</span>=<span class="hljs-string">{12}</span> <span class="hljs-attr">sm</span>=<span class="hljs-string">{9}</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">RepoFilter</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">RepoList</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span></span>
+    )
+  }
+}
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>Build Profile Component(s)</h2>
+<h4>Profile - Step 1:</h4>
+<ul>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">Add </label><code>user</code> and <code>orgs</code> to state</li>
+<li><input type="checkbox" id="checkbox14"><label for="checkbox14">Create Grid for profile</label></li>
+<li><input type="checkbox" id="checkbox15"><label for="checkbox15">Introduce styling</label></li>
+<li><input type="checkbox" id="checkbox16"><label for="checkbox16">Bring in dummy data from </label><code>profile.json</code>, explain this data mimic GitHub api payload.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">user</span>: {},
+      <span class="hljs-attr">orgs</span>: []
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { user, orgs } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { classes } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Grid</span>
+        <span class="hljs-attr">container</span>
+        <span class="hljs-attr">direction</span>=<span class="hljs-string">"column"</span>
+        <span class="hljs-attr">align</span>=<span class="hljs-string">"center"</span>
+        <span class="hljs-attr">justify</span>=<span class="hljs-string">"center"</span>
+        <span class="hljs-attr">spacing</span>=<span class="hljs-string">{0}</span>
+      &gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{user.avatar_url}</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{classes.avatar}/</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span> <span class="hljs-attr">color</span>=<span class="hljs-string">"secondary"</span>&gt;</span>
+            {user.name}
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span>&gt;</span>{user.login}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+    )
+  }
+}
+
+const styles = theme =&gt; ({
+  avatar: {
+    width: 200,
+    height: 200
+  }
+})
+
+export default withStyles(styles)(Profile)
+</span></div></code></pre>
+<div style="page-break-after: always;"></div>
+<h4>Profile - Step 2:</h4>
+<ul>
+<li><input type="checkbox" id="checkbox17"><label for="checkbox17">Add basic profile stats</label></li>
+<li><input type="checkbox" id="checkbox18"><label for="checkbox18">Explain a bit more about Grid / flexbox styling.</label></li>
+<li><input type="checkbox" id="checkbox19"><label for="checkbox19">Perhaps draw grids on board to explain.</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { Grid, Avatar, Typography } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> { withStyles } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/styles'</span>
+<span class="hljs-keyword">import</span> ProfileStat <span class="hljs-keyword">from</span> <span class="hljs-string">'./ProfileStat'</span>
+<span class="hljs-keyword">import</span> { fetchUserInformation } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/github-api'</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">user</span>: {},
+      <span class="hljs-attr">orgs</span>: []
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { user, orgs } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { classes } = <span class="hljs-keyword">this</span>.props
+
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">container</span> <span class="hljs-attr">direction</span>=<span class="hljs-string">"column"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span>
+            <span class="hljs-attr">container</span>
+            <span class="hljs-attr">direction</span>=<span class="hljs-string">"column"</span>
+            <span class="hljs-attr">align</span>=<span class="hljs-string">"center"</span>
+            <span class="hljs-attr">justify</span>=<span class="hljs-string">"center"</span>
+            <span class="hljs-attr">spacing</span>=<span class="hljs-string">{0}</span>
+          &gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{user.avatar_url}</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{classes.avatar}</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span> <span class="hljs-attr">color</span>=<span class="hljs-string">"secondary"</span>&gt;</span>
+                {user.name}
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span>&gt;</span>{user.login}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">container</span> <span class="hljs-attr">justify</span>=<span class="hljs-string">"space-between"</span> <span class="hljs-attr">align</span>=<span class="hljs-string">"center"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span>&gt;</span>{user.followers}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"small"</span>&gt;</span>
+                followers
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span>&gt;</span>{user.public_repos}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"small"</span>&gt;</span>
+                repositories
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span>&gt;</span>{user.following}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"small"</span>&gt;</span>
+                following
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>                        
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+    )
+  }
+}
+
+const styles = theme =&gt; ({
+  avatar: {
+    width: 200,
+    height: 200
+  }
+})
+
+export default withStyles(styles)(Profile)
+</span></div></code></pre>
+<div style="page-break-after: always;"></div>
+<h4>Profile - Step 3:</h4>
+<ul>
+<li><input type="checkbox" id="checkbox20"><label for="checkbox20">Add Organization(s)</label></li>
+<li><input type="checkbox" id="checkbox21"><label for="checkbox21">Finish Styling (bottomBorder)</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { Grid, Avatar, Typography } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> { withStyles } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/styles'</span>
+<span class="hljs-keyword">import</span> ProfileStat <span class="hljs-keyword">from</span> <span class="hljs-string">'./ProfileStat'</span>
+<span class="hljs-keyword">import</span> { fetchUserInformation } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/github-api'</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">user</span>: {},
+      <span class="hljs-attr">orgs</span>: []
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { user, orgs } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { classes } = <span class="hljs-keyword">this</span>.props
+
+    <span class="hljs-keyword">return</span> (
+      &lt;Grid container direction="column"&gt;
+        &lt;Grid item&gt;
+          &lt;Grid
+            container
+            direction="column"
+            align="center"
+            justify="center"
+            spacing={0}
+            className={classes.bottomBorder}
+          &gt;
+            &lt;Grid item&gt;
+              &lt;Avatar src={user.avatar_url} className={classes.avatar} /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="headline" color="secondary"&gt;
+                {user.name}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="caption"&gt;{user.login}&lt;/Typography&gt;
+            &lt;/Grid&gt;
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item&gt;
+          &lt;Grid container justify="space-between" align="center" className={classes.bottomBorder}&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="headline"&gt;{user.followers}&lt;/Typography&gt;
+              &lt;Typography type="caption" component="small"&gt;
+                followers
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="headline"&gt;{user.public_repos}&lt;/Typography&gt;
+              &lt;Typography type="caption" component="small"&gt;
+                repositories
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="headline"&gt;{user.following}&lt;/Typography&gt;
+              &lt;Typography type="caption" component="small"&gt;
+                following
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;    
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item&gt;
+          &lt;Grid container justify="center" className={classes.bottomBorder}&gt;
+            {orgs.map(org =&gt; {
+              return (
+                &lt;Grid item key={org.id}&gt;
+                  &lt;Avatar src={org.avatar_url} /&gt;
+                &lt;/Grid&gt;
+              )
+            })}
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+      &lt;/Grid&gt;
+    )
+  }
+}
+
+const styles = theme =&gt; ({
+  bottomBorder: {
+    borderBottom: '1px solid #eee',
+    paddingTop: theme.spacing.unit
+  },
+  avatar: {
+    width: 200,
+    height: 200
+  }
+})
+
+export default withStyles(styles)(Profile)
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>More Components!!! (Code Reuse)</h2>
+<ul>
+<li><input type="checkbox" id="checkbox22"><label for="checkbox22">Add ProfileStat.js</label></li>
+<li><input type="checkbox" id="checkbox23"><label for="checkbox23">Explain benefits of doing this (code reuse, mass changes, testing)</label></li>
+<li><input type="checkbox" id="checkbox24"><label for="checkbox24">Convert </label><code>followers</code>, <code>repositories</code>, <code>following</code> to <code>&lt;ProfileStat/&gt;</code> in Profile.js</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> PropTypes <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>
+<span class="hljs-keyword">import</span> { Grid, Typography } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ProfileStat</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">static</span> propTypes = {
+    <span class="hljs-attr">label</span>: PropTypes.string.isRequired,
+    <span class="hljs-attr">value</span>: PropTypes.number.isRequired
+  }
+  render() {
+    <span class="hljs-keyword">const</span> { label, value } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">item</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"headline"</span>&gt;</span>{value}<span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Typography</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"caption"</span> <span class="hljs-attr">component</span>=<span class="hljs-string">"small"</span>&gt;</span>
+          {label}
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Typography</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span></span>
+    )
+  }
+}
+</div></code></pre>
+<pre class="hljs"><code><div>&lt;ProfileStat value={user.followers} label=<span class="hljs-string">"followers"</span> /&gt;
+&lt;ProfileStat value={user.public_repos} label="repositories" /&gt;
+&lt;ProfileStat value={user.following} label="following" /&gt;
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>Build RepoList Component(s)</h2>
+<h4>RepoList - Step 1:</h4>
+<ul>
+<li><input type="checkbox" id="checkbox25"><label for="checkbox25">Add </label><code>repos</code> to RepoList state</li>
+<li><input type="checkbox" id="checkbox26"><label for="checkbox26">Add dummy data from </label><code>repolist.json</code> to get some visualization</li>
+<li><input type="checkbox" id="checkbox27"><label for="checkbox27">Create a simple </label><code>Repo.js</code></li>
+<li><input type="checkbox" id="checkbox28"><label for="checkbox28">Sort repos by date (compareFunction returns -1, 0, 1 to determine order)</label></li>
+<li><input type="checkbox" id="checkbox29"><label for="checkbox29">Map - loops over repos, returning a new element for each one.  converts array to </label><code>&lt;Repo....&gt;</code> for each.</li>
+</ul>
+<p><em>RepoList.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { List } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> Repo <span class="hljs-keyword">from</span> <span class="hljs-string">'./Repo'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepoList</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">repos</span>: []
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { repos } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">List</span>&gt;</span>
+        {repos
+          .sort((a, b) =&gt; {
+            return Date.parse(b.pushed_at) - Date.parse(a.pushed_at)
+          })
+          .map(repo =&gt; {
+            return <span class="hljs-tag">&lt;<span class="hljs-name">Repo</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{repo.id}</span> <span class="hljs-attr">repo</span>=<span class="hljs-string">{repo}</span> /&gt;</span>
+          })}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">List</span>&gt;</span>
+    )
+  }
+}
+</span></div></code></pre>
+<p><em>Repo.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Repo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">const</span> { repo } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+        {repo.name} - {repo.pushed_at}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+    )
+  }
+}
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h4>RepoList - Step 2:</h4>
+<ul>
+<li><input type="checkbox" id="checkbox30"><label for="checkbox30">Complete Repo.js</label></li>
+<li><input type="checkbox" id="checkbox31"><label for="checkbox31">inline funcitons as components</label></li>
+<li><input type="checkbox" id="checkbox32"><label for="checkbox32">install moment to put a better readable message</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { ListItem, Card, CardHeader, CardContent, CardActions, Typography, Chip, Avatar } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> { Star, CallSplit } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui-icons'</span>
+<span class="hljs-keyword">import</span> moment <span class="hljs-keyword">from</span> <span class="hljs-string">'moment'</span>
+
+<span class="hljs-keyword">const</span> StarAvatar = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Star</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Avatar</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">const</span> ForkAvatar = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">CallSplit</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Avatar</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Repo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">const</span> { repo } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">const</span> timeUpdated = moment(repo.pushed_at).fromNow()
+    <span class="hljs-keyword">return</span> (
+      &lt;ListItem&gt;
+        &lt;Card&gt;
+          &lt;CardHeader title={repo.name} /&gt;
+          &lt;CardContent&gt;
+            &lt;Typography&gt;{repo.description}&lt;/Typography&gt;
+            &lt;Typography type="caption" color="secondary"&gt;
+              Last Update: {timeUpdated}
+            &lt;/Typography&gt;
+          &lt;/CardContent&gt;
+          &lt;CardActions&gt;
+            &lt;Chip label={repo.language} /&gt;
+            &lt;Chip avatar={&lt;StarAvatar /&gt;} label={repo.stargazers_count} /&gt;
+            &lt;Chip avatar={&lt;ForkAvatar /&gt;} label={repo.forks_count} /&gt;
+          &lt;/CardActions&gt;
+        &lt;/Card&gt;
+      &lt;/ListItem&gt;
+    )
+  }
+}
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h3>RepoList - Step 3:</h3>
+<ul>
+<li><input type="checkbox" id="checkbox33"><label for="checkbox33">Hide language if not present</label></li>
+<li><input type="checkbox" id="checkbox34"><label for="checkbox34">style Repo</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { ListItem, Card, CardHeader, CardContent, CardActions, Typography, Chip, Avatar } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> { withStyles } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/styles'</span>
+<span class="hljs-keyword">import</span> { Star, CallSplit } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui-icons'</span>
+<span class="hljs-keyword">import</span> moment <span class="hljs-keyword">from</span> <span class="hljs-string">'moment'</span>
+
+<span class="hljs-keyword">const</span> StarAvatar = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Star</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Avatar</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">const</span> ForkAvatar = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Avatar</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">CallSplit</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Avatar</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Repo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">const</span> { classes, repo } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">const</span> timeUpdated = moment(repo.pushed_at).fromNow()
+    <span class="hljs-keyword">return</span> (
+      &lt;ListItem&gt;
+        &lt;Card className={classes.repo}&gt;
+          &lt;CardHeader title={repo.name} /&gt;
+          &lt;CardContent&gt;
+            &lt;Typography&gt;{repo.description}&lt;/Typography&gt;
+            &lt;Typography type="caption" color="secondary"&gt;
+              Last Update: {timeUpdated}
+            &lt;/Typography&gt;
+          &lt;/CardContent&gt;
+          &lt;CardActions&gt;
+            {repo.language &amp;&amp; &lt;Chip label={repo.language} /&gt;}
+            &lt;Chip avatar={&lt;StarAvatar /&gt;} label={repo.stargazers_count} /&gt;
+            &lt;Chip avatar={&lt;ForkAvatar /&gt;} label={repo.forks_count} /&gt;
+          &lt;/CardActions&gt;
+        &lt;/Card&gt;
+      &lt;/ListItem&gt;
+    )
+  }
+}
+
+const styles = theme =&gt; ({
+  repo: {
+    width: `100%`
+  }
+})
+
+export default withStyles(styles)(Repo)
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h3>RepoList - Step 4:</h3>
+<ul>
+<li><input type="checkbox" id="checkbox35"><label for="checkbox35">Fill out RepoFilter.js</label></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> PropTypes <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>
+<span class="hljs-keyword">import</span> { TextField } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepoFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">static</span> propTypes = {}
+
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TextField</span>
+        <span class="hljs-attr">id</span>=<span class="hljs-string">"repo-filter"</span>
+        <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"Filter repositories..."</span>
+        <span class="hljs-attr">fullWidth</span>
+      /&gt;</span>
+    )
+  }
+}
+</span></div></code></pre>
+<div style="page-break-after: always;"></div>
+<h3>RepoList - Step 5:</h3>
+<ul>
+<li><input type="checkbox" id="checkbox36"><label for="checkbox36">Add filter to App state</label></li>
+<li><input type="checkbox" id="checkbox37"><label for="checkbox37">Add filter update handler to App</label></li>
+<li><input type="checkbox" id="checkbox38"><label for="checkbox38">Update RepoFilter to use handler (use console logger to show state updates)</label></li>
+<li><input type="checkbox" id="checkbox39"><label for="checkbox39">Pass filter to repo list as prop</label></li>
+<li><input type="checkbox" id="checkbox40"><label for="checkbox40">Update RepoList sort / map to add a filter first (filter by name and description)</label></li>
+<li><input type="checkbox" id="checkbox41"><label for="checkbox41">Explain that the props of these functions are changing as we type into the filter (</label><code>.setState(...)</code> is happening).  This causes React to reconsile te DOM and show the changes!  WOW!!!!!</li>
+</ul>
+<p><em>App.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+    <span class="hljs-keyword">this</span>.state = { <span class="hljs-attr">filter</span>: <span class="hljs-string">''</span> }
+  }
+
+  handleFilterUpdate = <span class="hljs-function"><span class="hljs-params">filter</span> =&gt;</span> {
+    <span class="hljs-keyword">this</span>.setState({ filter })
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { filter } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">return</span> (
+      &lt;Grid container spacing={24}&gt;
+        &lt;Grid item xs={12} sm={3}&gt;
+          &lt;Profile /&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item xs={12} sm={9}&gt;
+          &lt;RepoFilter onUpdate={this.handleFilterUpdate} /&gt;
+          &lt;RepoList filter={filter} /&gt;
+        &lt;/Grid&gt;
+      &lt;/Grid&gt;
+    )
+  }
+}
+</div></code></pre>
+<p><em>RepoFilter.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> PropTypes <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>
+<span class="hljs-keyword">import</span> { TextField } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepoFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">static</span> propTypes = {
+    <span class="hljs-attr">onUpdate</span>: PropTypes.func.isRequired
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { onUpdate } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TextField</span>
+        <span class="hljs-attr">id</span>=<span class="hljs-string">"repo-filter"</span>
+        <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"Filter repositories..."</span>
+        <span class="hljs-attr">fullWidth</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{({</span> <span class="hljs-attr">target:</span> { <span class="hljs-attr">value</span> } }) =&gt;</span> onUpdate(value)}
+      /&gt;
+    )
+  }
+}
+</span></div></code></pre>
+<p><em>RepoList.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { List } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> Repo <span class="hljs-keyword">from</span> <span class="hljs-string">'./Repo'</span>
+<span class="hljs-keyword">import</span> { fetchRepos } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/github-api'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepoList</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">repos</span>: []
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { repos } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { filter } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">List</span>&gt;</span>
+        {repos
+          .filter(repo =&gt; {
+            return (
+              (repo.name &amp;&amp; repo.name.toLowerCase().includes(filter.toLowerCase())) ||
+              (repo.description &amp;&amp; repo.description.toLowerCase().includes(filter.toLowerCase()))
+            )
+          })
+          .sort((a, b) =&gt; {
+            return Date.parse(b.pushed_at) - Date.parse(a.pushed_at)
+          })
+          .map(repo =&gt; {
+            return <span class="hljs-tag">&lt;<span class="hljs-name">Repo</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{repo.id}</span> <span class="hljs-attr">repo</span>=<span class="hljs-string">{repo}</span> /&gt;</span>
+          })}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">List</span>&gt;</span>
+    )
+  }
+}     
+</span></div></code></pre>
+<div style="page-break-after: always;"></div>
+<h2>Hook into GitHub API</h2>
+<h3>API - Step 1:</h3>
+<ul>
+<li><input type="checkbox" id="checkbox42"><label for="checkbox42">Now...let's bring this thing to life!!!!</label></li>
+<li><input type="checkbox" id="checkbox43"><label for="checkbox43">ApiUtils.js and github-api.js</label></li>
+</ul>
+<p><em>ApiUtils.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> ApiUtils = {  
+    <span class="hljs-attr">checkStatus</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">response</span>) </span>{
+      <span class="hljs-keyword">if</span> (response.status &gt;= <span class="hljs-number">200</span> &amp;&amp; response.status &lt; <span class="hljs-number">300</span>) {
+        <span class="hljs-keyword">return</span> response;
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">let</span> error = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(response.statusText);
+        error.response = response;
+        <span class="hljs-keyword">throw</span> error;
+      }
+    }
+  }
+
+  <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ApiUtils
+</div></code></pre>
+<p><em>github-api.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> ApiUtils <span class="hljs-keyword">from</span> <span class="hljs-string">'./ApiUtils'</span>
+
+<span class="hljs-keyword">const</span> BASE_URL = <span class="hljs-string">'https://api.github.com'</span>
+
+<span class="hljs-keyword">const</span> fetchRepos = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> url = <span class="hljs-string">`<span class="hljs-subst">${BASE_URL}</span>/users/<span class="hljs-subst">${username}</span>/repos?per_page=250`</span>
+  <span class="hljs-keyword">return</span> fetch(url)
+    .then(ApiUtils.checkStatus)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+}
+
+<span class="hljs-keyword">const</span> fetchUser = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> url = <span class="hljs-string">`<span class="hljs-subst">${BASE_URL}</span>/users/<span class="hljs-subst">${username}</span>`</span>
+  <span class="hljs-keyword">return</span> fetch(url)
+    .then(ApiUtils.checkStatus)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+}
+
+<span class="hljs-keyword">const</span> fetchOrgs = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> url = <span class="hljs-string">`<span class="hljs-subst">${BASE_URL}</span>/users/<span class="hljs-subst">${username}</span>/orgs`</span>
+  <span class="hljs-keyword">return</span> fetch(url)
+    .then(ApiUtils.checkStatus)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+}
+
+<span class="hljs-keyword">const</span> fetchUserInformation = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.all([fetchUser(username), fetchOrgs(username)]).then(<span class="hljs-function">(<span class="hljs-params">[user, orgs]</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> { user, orgs }
+  })
+}
+
+<span class="hljs-keyword">export</span> { fetchRepos, fetchUser, fetchOrgs, fetchUserInformation }
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h3>API - Step 2:</h3>
+<ul>
+<li><input type="checkbox" id="checkbox44"><label for="checkbox44">Remember earlier when talking about Router and URL, let's use that as the key to search for the proper GH repo</label></li>
+<li><input type="checkbox" id="checkbox45"><label for="checkbox45">Grab </label><code>username</code> in <code>App.js</code> and send it along to <code>&lt;Profile/&gt;</code> and <code>&lt;RepoList/&gt;</code></li>
+<li><input type="checkbox" id="checkbox46"><label for="checkbox46">Clean state in </label><code>Profile.js</code> and <code>RepoList.js</code> and add the <code>componentWillMount()</code>  (<code>cwm</code>)</li>
+</ul>
+<p><em>App.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> Grid <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/Grid'</span>
+<span class="hljs-keyword">import</span> Profile <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/Profile'</span>
+<span class="hljs-keyword">import</span> RepoList <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/RepoList'</span>
+<span class="hljs-keyword">import</span> RepoFilter <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/RepoFilter'</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+    <span class="hljs-keyword">this</span>.state = { <span class="hljs-attr">filter</span>: <span class="hljs-string">''</span> }
+  }
+
+  handleFilterUpdate = <span class="hljs-function"><span class="hljs-params">filter</span> =&gt;</span> {
+    <span class="hljs-keyword">this</span>.setState({ filter })
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { filter } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> username = <span class="hljs-keyword">this</span>.props.match.params.username
+    <span class="hljs-keyword">return</span> (
+      &lt;Grid container spacing={24}&gt;
+        &lt;Grid item xs={12} sm={3}&gt;
+          &lt;Profile username={username} /&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item xs={12} sm={9}&gt;
+          &lt;RepoFilter onUpdate={this.handleFilterUpdate} /&gt;
+          &lt;RepoList username={username} filter={filter} /&gt;
+        &lt;/Grid&gt;
+      &lt;/Grid&gt;
+    )
+  }
+}
+
+export default App
+
+</div></code></pre>
+<p><em>Profile.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { Grid, Avatar, Typography } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> { withStyles } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui/styles'</span>
+<span class="hljs-keyword">import</span> ProfileStat <span class="hljs-keyword">from</span> <span class="hljs-string">'./ProfileStat'</span>
+<span class="hljs-keyword">import</span> { fetchUserInformation } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/github-api'</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">user</span>: {},
+      <span class="hljs-attr">orgs</span>: []
+    }
+  }
+
+  getUserData = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+    fetchUserInformation(username).then(<span class="hljs-function">(<span class="hljs-params">{ user, orgs }</span>) =&gt;</span> {
+      <span class="hljs-keyword">this</span>.setState({ user, orgs })
+    })
+  }
+
+  componentWillMount() {
+    <span class="hljs-keyword">this</span>.getUserData(<span class="hljs-keyword">this</span>.props.username)
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { user, orgs } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { classes } = <span class="hljs-keyword">this</span>.props
+
+    <span class="hljs-keyword">return</span> (
+      &lt;Grid container direction="column"&gt;
+        &lt;Grid item&gt;
+          &lt;Grid
+            container
+            direction="column"
+            align="center"
+            justify="center"
+            spacing={0}
+            className={classes.bottomBorder}
+          &gt;
+            &lt;Grid item&gt;
+              &lt;Avatar src={user.avatar_url} className={classes.avatar} /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="headline" color="secondary"&gt;
+                {user.name}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item&gt;
+              &lt;Typography type="caption"&gt;{user.login}&lt;/Typography&gt;
+            &lt;/Grid&gt;
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item&gt;
+          &lt;Grid container justify="space-between" align="center" className={classes.bottomBorder}&gt;
+            &lt;ProfileStat label="followers" value={user.followers} /&gt;
+            &lt;ProfileStat label="repositories" value={user.public_repos} /&gt;
+            &lt;ProfileStat label="following" value={user.following} /&gt;
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+        &lt;Grid item&gt;
+          &lt;Grid container justify="center" className={classes.bottomBorder}&gt;
+            {orgs.map(org =&gt; {
+              return (
+                &lt;Grid item key={org.id}&gt;
+                  &lt;Avatar src={org.avatar_url} /&gt;
+                &lt;/Grid&gt;
+              )
+            })}
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+      &lt;/Grid&gt;
+    )
+  }
+}
+
+const styles = theme =&gt; ({
+  bottomBorder: {
+    borderBottom: '1px solid #eee',
+    paddingTop: theme.spacing.unit
+  },
+  avatar: {
+    width: 200,
+    height: 200
+  }
+})
+
+export default withStyles(styles)(Profile)
+</div></code></pre>
+<p><em>RepoList.js</em></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> { List } <span class="hljs-keyword">from</span> <span class="hljs-string">'material-ui'</span>
+<span class="hljs-keyword">import</span> Repo <span class="hljs-keyword">from</span> <span class="hljs-string">'./Repo'</span>
+<span class="hljs-keyword">import</span> { fetchRepos } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/github-api'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepoList</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>(args) {
+    <span class="hljs-keyword">super</span>(args)
+
+    <span class="hljs-keyword">this</span>.state = {
+      <span class="hljs-attr">repos</span>: []
+    }
+  }
+
+  getRepos = <span class="hljs-function"><span class="hljs-params">username</span> =&gt;</span> {
+    fetchRepos(username).then(<span class="hljs-function"><span class="hljs-params">repos</span> =&gt;</span> {
+      <span class="hljs-keyword">this</span>.setState({ repos })
+    })
+  }
+
+  componentWillMount() {
+    <span class="hljs-keyword">this</span>.getRepos(<span class="hljs-keyword">this</span>.props.username)
+  }
+
+  render() {
+    <span class="hljs-keyword">const</span> { repos } = <span class="hljs-keyword">this</span>.state
+    <span class="hljs-keyword">const</span> { filter } = <span class="hljs-keyword">this</span>.props
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">List</span>&gt;</span>
+        {repos
+          .filter(repo =&gt; {
+            return (
+              (repo.name &amp;&amp; repo.name.toLowerCase().includes(filter.toLowerCase())) ||
+              (repo.description &amp;&amp; repo.description.toLowerCase().includes(filter.toLowerCase()))
+            )
+          })
+          .sort((a, b) =&gt; {
+            return Date.parse(b.pushed_at) - Date.parse(a.pushed_at)
+          })
+          .map(repo =&gt; {
+            return <span class="hljs-tag">&lt;<span class="hljs-name">Repo</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{repo.id}</span> <span class="hljs-attr">repo</span>=<span class="hljs-string">{repo}</span> /&gt;</span>
+          })}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">List</span>&gt;</span>
+    )
+  }
+}
+</span></div></code></pre>
+
+</body>
+</html>
